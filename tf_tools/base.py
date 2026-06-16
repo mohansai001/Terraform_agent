@@ -201,30 +201,31 @@ async def TF_Module_builder(
 
         # Push all files to the target repository
         if files_to_push:
-            logger.info(f"[TF_Module_builder] Pushing {len(files_to_push)} files to repository: {repo_name}")
-            print(f"\nPushing {len(files_to_push)} files to repository: {repo_name}")
+            # logger.info(f"[TF_Module_builder] Pushing {len(files_to_push)} files to repository: {repo_name}")
+            # print(f"\nPushing {len(files_to_push)} files to repository: {repo_name}")
             
-            # Display what will be pushed with proper folder structure
-            for file_path in files_to_push.keys():
-                logger.info(f"[TF_Module_builder] File to be pushed: {file_path}")
-                print(f"  - {file_path}")
+            # # Display what will be pushed with proper folder structure
+            # for file_path in files_to_push.keys():
+            #     logger.info(f"[TF_Module_builder] File to be pushed: {file_path}")
+            #     print(f"  - {file_path}")
             
-            try:
-                commit_message = f"Add Terraform modules for {', '.join(processed_resources)} on {cloud_provider}"
-                github_push_files(
-                    repo_name=f"{REPO_OWNER}/{TERRAFORM_MODULES_REPO}",
-                    files_to_push=files_to_push,
-                    commit_message=commit_message,
-                    branch="main"
-                )
+            # try:
+            #     commit_message = f"Add Terraform modules for {', '.join(processed_resources)} on {cloud_provider}"
+            #     # github_push_files(
+            #     #     repo_name=f"{REPO_OWNER}/{TERRAFORM_MODULES_REPO}",
+            #     #     files_to_push=files_to_push,
+            #     #     commit_message=commit_message,
+            #     #     branch="main"
+            #     # )
                 
-                logger.info(f"[TF_Module_builder] Successfully pushed all files to {repo_name}")
-                print(f"Successfully pushed all files to {repo_name}")
+            #     logger.info(f"[TF_Module_builder] Successfully pushed all files to {repo_name}")
+            #     print(f"Successfully pushed all files to {repo_name}")
                 
-            except Exception as push_error:
-                logger.error(f"[TF_Module_builder] Error pushing files to repository: {push_error}", exc_info=True)
-                print(f"Error pushing files to repository: {push_error}")
-                return f"ERROR: Failed to push files to repository - {str(push_error)}"
+            # except Exception as push_error:
+            #     logger.error(f"[TF_Module_builder] Error pushing files to repository: {push_error}", exc_info=True)
+            #     print(f"Error pushing files to repository: {push_error}")
+            #     return f"ERROR: Failed to push files to repository - {str(push_error)}"
+            return files_to_push
         else:
             logger.info("[TF_Module_builder] No files to push")
             print("No files to push")
