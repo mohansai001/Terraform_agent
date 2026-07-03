@@ -17,7 +17,7 @@ from vida.utils.llm import get_azure_response
 
 def tf_get_azure_response(content, file_name, cloud_provider, resource_group_dict, resource, techstack):
     logger.info("[tf_get_azure_response] Preparing Terraform prompt to generate script.....")
-    # print("Inside azure call.....")
+    print("Inside azure call.....")
     
     # Convert dictionaries to strings for the prompt if needed
     resource_str = json.dumps(resource, indent=2) if isinstance(resource, dict) else str(resource)
@@ -121,6 +121,7 @@ async def TF_Module_builder(
                 continue
 
             # Process each file for this resource type
+            print("paths :",paths)
             for path in paths:
                 try:
                     logger.info(f"[TF_Module_builder] Processing path: {path}")
@@ -128,6 +129,7 @@ async def TF_Module_builder(
                     
                     # Read file content
                     content = github_read_contents(path)
+                    print("path: \n",path,"content: \n",content, end = "\n "+"="*30)
                     if not content:
                         logger.warning(f"[TF_Module_builder] No content found for {path}")
                         # print(f"No content found for {path}")
@@ -153,6 +155,7 @@ async def TF_Module_builder(
                                 resource=resource_config,
                                 techstack=techstack
                             )
+                            print(updated_content)
                             logger.info(f"[TF_Module_builder] Azure AI response for {file_name} received : {updated_content}")
                             
                             if updated_content and not updated_content.startswith("Azure Error:"): #type: ignore

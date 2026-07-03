@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 from vida.utils.logger import get_logger
 from tf_tools.base import TF_Module_builder
 from agent_framework import tool #type: ignore
