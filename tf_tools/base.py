@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 from typing import Annotated
 from pydantic import Field
 from agent_framework import tool #type: ignore
@@ -7,9 +9,11 @@ from typing import Dict, Any
 from vida.utils.logger import get_logger
 from vida.adapters.github.git_search import github_find_folder
 from vida.utils.prompt_manager_v2 import GeneratorPrompt
-from vida.utils.config import REPO_OWNER,TERRAFORM_MODULES_REPO
+from vida.utils.config import REPO_OWNER,TERRAFORM_MODULES_REPO, github_token
+from vida.utils.github_client import get_github_client
 
 logger = get_logger(__name__)
+g=get_github_client(github_token)
 
 
 
@@ -113,7 +117,7 @@ async def TF_Module_builder(
             # print(f"\n=== Processing {resource_type} ===")
             
             # Get all file paths for this resource type
-            paths = github_find_folder(cloud_provider, resource_type)
+            paths = github_find_folder(cloud_provider, resource_type,g=g)
             
             if not paths:
                 logger.warning(f"[terraform_agent][TF_Module_builder] No modules found for {resource_type}")
@@ -128,7 +132,8 @@ async def TF_Module_builder(
                     # print(f"Processing path: {path}")
                     
                     # Read file content
-                    content = github_read_contents(path)
+                    content = github_read_contents(path,g=g)
+                    print("content :",content)
                     print("path: \n",path,"content: \n",content, end = "\n "+"="*30)
                     if not content:
                         logger.warning(f"[TF_Module_builder] No content found for {path}")
@@ -228,6 +233,7 @@ async def TF_Module_builder(
             #     logger.error(f"[TF_Module_builder] Error pushing files to repository: {push_error}", exc_info=True)
             #     print(f"Error pushing files to repository: {push_error}")
             #     return f"ERROR: Failed to push files to repository - {str(push_error)}"
+            print("Pushed files:", files_to_push)
             return files_to_push
         else:
             logger.info("[TF_Module_builder] No files to push")
@@ -247,3 +253,10 @@ async def TF_Module_builder(
         import traceback
         traceback.print_exc()
         return f"ERROR: Failed to generate Terraform configuration - {str(e)}"
+    
+
+import asyncio
+
+if __name__ == "__main__":
+    response = asyncio.run(TF_Module_builder(cloud_provider= "azure",deploy_target_name= "webapp",target_service_name= "webapp",target_service_location= "East US",target_service_sku= "F1",resource_group_name= "my-resource-group",resource_group_location= "East US",techstack= "python",repo_name= "Shashank-workflow"))
+    print(response)
