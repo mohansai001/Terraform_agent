@@ -20,7 +20,7 @@ async def terraform_agent_call(request: terraform_agent_request):
     print("[terraform_agent] Successfully generated Terraform agent instance.")
     output, is_json = try_parse_json(response.text)
     return {
-        "response": f"Github agent executed successfully",
+        "response": f"Terraform agent executed successfully",
         "raw": response,
         "is_json": is_json,
         "output": output
