@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  PYTHON_VERSION: "3.12"
+  PYTHON_VERSION: "3.13.1"
   AZURE_WEBAPP_NAME: "devopsbackend2"
 
 jobs:
