@@ -7,11 +7,14 @@ from typing import Annotated
 from pydantic import Field
 from vida.utils.prompt_manager_v2 import AgentInstructionPrompt, AgentDescriptionPrompt
 from vida.agents.Base_agent import Base_Agent
+from vida.utils.config import Terraform_agent_config as tf_config
 
 logger = get_logger(__name__)
 
 class TfAgent(Base_Agent):
     name = "terraform_agent"
+    model = tf_config.model
+    AI_endpoint = tf_config.AI_endpoint
     instructions = str(AgentInstructionPrompt("tf-agent-instructions"))
     tools=[TF_Module_builder]
 
